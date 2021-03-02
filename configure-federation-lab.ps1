@@ -708,6 +708,7 @@ $london_vm2 = [pscustomobject] @{
     "vc" = $vc_london
     "ova" = $vm_ova
     "esx" = $esx2_london
+    "network" = $vm_network
 }
 
 $nsx_connections = @{
@@ -1881,6 +1882,11 @@ Function deploy_VMs() {
         } else {
             Debug "Deploying $($vm.display_name) on $($esx.name)"
             $v = Import-VApp -Server $vi -Source $vm.ova -OvfConfiguration $ovfconfig -Name $vm.display_name -Location $cluster -Datastore $datastore -VMHost $h -DiskStorageFormat thin
+        }
+        $v = Get-VM -Server $vi -Name $vm.display_name
+        $network = Get-NetworkAdapter -Server $vi -VM $vm.display_name
+        if ($network.NetworkName -ne $vm.network) {
+            $network | Set-NetworkAdapter -Portgroup $vm.network -Confirm:$false
         }
         if ($v.PowerState -eq "PoweredOff") {
             Debug "Powering ON $($v.name)"
