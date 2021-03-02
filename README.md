@@ -24,5 +24,4 @@ PS /home/user> ./configure-federation-lab.ps1
 ![Lab Design](images/lab-design.png)
 
 ## Logical Objects
-![Logical Objects](images/logical-objects)
-
+![Logical Objects](images/logical-objects.png)
